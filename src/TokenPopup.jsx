@@ -43,8 +43,8 @@ function TokenPopup({ setOpenTokenPopup, Eth, account , CToken }) {
       .investEther(tokens)
       .send({ value: etherAmount, from: account })
       .on("transactionHash", (hash) => {
-        console.log("Transaction Successful");
-
+        
+        alert(`Earned ${tokens} CTokens`);
 
         var today = new Date();
         var time = today.getTime();

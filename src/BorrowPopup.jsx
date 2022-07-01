@@ -41,7 +41,7 @@ function BorrowPopup({ setOpenBorrowPopup, Eth, account }) {
       .borrowEther(etherAmount , tokens)
       .send({ from: account })
       .on("transactionHash", (hash) => {
-        console.log("Transaction Successful");
+        alert(`Earned ${tokens} CTokens`);
 
         var today = new Date();
         var time = today.getTime();
@@ -121,7 +121,11 @@ function BorrowPopup({ setOpenBorrowPopup, Eth, account }) {
 
         <div className="second_header">
           <p onClick={() => setActiveTab("Borrow")}>Borrow</p>
-          <p onClick={() => setActiveTab("Repay")}>Repay</p>
+          <p onClick={() => {
+            if(repayBalance > 0){
+              setActiveTab("Repay")
+            }
+          }}>Repay</p>
         </div>
 
         {activeTab === "Borrow" && (

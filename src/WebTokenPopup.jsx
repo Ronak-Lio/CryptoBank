@@ -50,16 +50,6 @@ function WebTokenPopup({
 
     const tokens = parseInt(input) * 10;
 
-    // webToken.methods
-    //   .approve(webSwap._address,input)
-    //   .send({ from: account })
-    //   .on("transactionHash", (hash) => {
-
-    //     webSwap.methods.lendTokens(input).on("transactionHash", (hash) => {
-    //       console.log("Tokens Lended")
-    //     })
-
-    //   });
 
     webToken.methods
       .transfer(webSwap._address, input)
@@ -69,22 +59,22 @@ function WebTokenPopup({
       });
 
 
-      // var today = new Date();
-      //   var time = today.getTime();
+      var today = new Date();
+        var time = today.getTime();
 
-      //   webSwap.methods
-      //     .earnCTokens(tokens)
-      //     .send({ from: account })
-      //     .on("transactionHash", (hash) => {
-      //       console.log("Earned 10 CTokens");
-      //     });
+        webSwap.methods
+          .earnCTokens(tokens)
+          .send({ from: account })
+          .on("transactionHash", (hash) => {
+            alert(`Earned ${tokens} CTokens`);
+          });
 
-      //   db.collection("users").doc(account).update({
-      //     investedWebToken: input,
-      //     investedWebTokenAt: time,
-      //   });
+        db.collection("users").doc(account).update({
+          investedWebToken: input,
+          investedWebTokenAt: time,
+        });
 
-      //   setOpenWebTokenPopup(false);
+        setOpenWebTokenPopup(false);
   };
 
   const withDrawnBalance = () => {

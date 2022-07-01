@@ -46,9 +46,9 @@ function App() {
     const ethBal = await web3.eth.getBalance(accounts[0]);
     setEthBalance(ethBalance);
     console.log("EthBalance i", ethBal);
-
-    // Load Eth Contract
     const networkId = await web3.eth.net.getId();
+
+    //Load Eth Contract
     const ethData = EthContract.networks[networkId];
     if (ethData.address) {
       const ethContract = new web3.eth.Contract(
@@ -82,7 +82,7 @@ function App() {
       alert("EthSwap is not deployed to the Network");
     }
 
-    // Load WebSwap Contract
+    // //Load WebSwap Contract
     let webSwapContract = {}
     const webSwapData = WebSwap.networks[networkId];
     if (webSwapData.address) {
@@ -95,27 +95,12 @@ function App() {
     } else {
       alert("WebSwap is not deployed to the Network");
     }
-
-     //Load Web Token
-
-    const webTokenData = WebToken.networks[networkId];
-    if (webTokenData.address) {
-      const TokenContract = new web3.eth.Contract(
-        WebToken.abi,
-        webTokenData.address
-      );
-      console.log(" Web Token Methods are ", TokenContract.methods);
-      setWebToken(TokenContract);
-
-      const balance = await TokenContract.methods.balanceOf(account).call();
-      console.log("Balance is x " + balance);
-    } else {
-      alert("WebToken is not deployed to the Network");
-    }
+        console.log("First enterer")
     
         // Load BlockSwap Contract
         const blockSwapData = BlockSwap.networks[networkId];
         if (blockSwapData.address) {
+          console.log("Yes address is present")
           const blockSwapContract = new web3.eth.Contract(
             BlockSwap.abi,
             blockSwapData.address
@@ -124,7 +109,7 @@ function App() {
           setBlockSwap(blockSwapContract);
 
         db.collection("users")
-        .doc(account)
+        .doc(accounts[0])
         .get()
         .then((doc) => {
           if (doc.exists) {
@@ -133,11 +118,11 @@ function App() {
             console.log("Document data::::::::::::::::::::::");
             webSwapContract.methods
               .withDrawToken(10)
-              .send({ from: account })
+              .send({ from: accounts[0] })
               .on("transactionHash", (hash) => {
-                console.log("Successfully earned 10 tokens");
+                alert("Earned 10 Webtokens");
 
-                db.collection("users").doc(account).set({
+                db.collection("users").doc(accounts[0]).set({
                   investEther: "0",
                   investedEtherAt: 0,
                   investedWebToken: "0",
@@ -148,17 +133,18 @@ function App() {
                   collateralValue :[ 
                     {
                     ether : '0',
-                    webToken : '0'
+                    webToken : '0',
+                    blockToken : '0'
                     }
                 ]
                 }).then(() => {
                   blockSwapContract.methods
                   .withDrawToken(10)
-                  .send({ from: account })
+                  .send({ from: accounts[0] })
                   .on("transactionHash", (hash) => {
-                    console.log("Successfully earned 10 tokens");
+                   alert("Earned 10 Blocktokens");
     
-                    db.collection("users").doc(account).update({
+                    db.collection("users").doc(accounts[0]).update({
                       investedBlockToken: "0",
                       investedBlockTokenAt: 0,
                       blockTokenBalance: 10,
@@ -190,8 +176,24 @@ function App() {
       console.log(" Blok Token Methods are ", TokenContract.methods);
       setBlockToken(TokenContract);
 
+    } else {
+      alert("BlockToken is not deployed to the Network");
+    }
+
+
+    //  //Load Web Token
+
+    const webTokenData = WebToken.networks[networkId];
+    if (webTokenData.address) {
+      const TokenContract = new web3.eth.Contract(
+        WebToken.abi,
+        webTokenData.address
+      );
+      console.log(" Web Token Methods are ", TokenContract.methods);
+      setWebToken(TokenContract);
+
       const balance = await TokenContract.methods.balanceOf(account).call();
-      console.log("Balance is xxxxxxxxxxxxx " + balance);
+      console.log("Balance is x " + balance);
     } else {
       alert("WebToken is not deployed to the Network");
     }
